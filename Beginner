@@ -1,0 +1,1322 @@
+package game;
+
+/* Nitin Code in the Game 
+ *	creating the main java frame of the game Tic-Tac-Toe
+ *reference in the read me file in the github
+ *creating a priavte class beginner that extends the java frame and also implements the ActionListener in the coding 
+ *
+ */
+import javax.swing.JButton;
+//importing the java wing JButton from java graphics which creates another tab in the project
+import javax.swing.JOptionPane;
+// this isused to provide standard dialog boxes such as message dialog box, confirm dialog box and input dialog box
+import javax.swing.JTextField;
+// here we are importing the Jtextfield that is a lightweight component that allows the editing of a single line of text 
+
+class Beginner extends javax.swing.JFrame implements java.awt.event.ActionListener
+{
+
+	boolean player1 = true;
+	// here we are creating a boolean for the player1 which later gives either true or false answer
+	int r = 0; int h = 0;
+	// defining two variable in the coding 
+	boolean buttonPressed = false;
+	// here defining the another boolean variable in the coding 
+	int another = -1;
+
+	boolean unavoidable = false;
+
+	static String Name1;
+	// another variable in the coding for the java code to be called later in the coding 
+
+	int alternate = 0;
+	// here we are intialising the value of the variable at 0
+	//creating a frame for the tab of the gaming
+	java.awt.Font face = new java.awt.Font("Times Black", 3, 25);
+	// also assigning a variable font f 
+	java.awt.Font face1 = new java.awt.Font("Times Black", 3, 16);
+	// creating another variable with the coding 
+	JTextField round = new JTextField(19);
+	//here the JTextFieldis  lightweight component that allows the editing of a single line of text 
+	int[][] mainInterface = new int[3][3];
+	// defining a array of two dimension that is it creates 3X3 tab in the coding 
+	int[][][] game = new int[9][3][3];
+	// another variable assigned for the array we will be needing 3 dimensional array
+	JButton[][] controller = new JButton[9][9];
+	//JButton generally represents a button that, when clicked by the user, carries out a particular action.
+	javax.swing.JPanel[][] javapanel = new javax.swing.JPanel[3][3];
+	/*
+	 *  creating a array pannel to store the coding in the main game memory
+	 *
+	 *helps in layouts which can store all the components of the coding and gives organized storage of the components
+	 */ 
+	javax.swing.JPanel np = new javax.swing.JPanel();
+	//creating a private class of the game which is only accessible by the members 
+
+
+	private Beginner() {
+		//creating a private class in the coding which contains the layout, gridlayout and buttons for the java frame in the coding 
+		super("The Ultimate Tic-Tac-Toe");
+
+		np.setLayout(new java.awt.GridLayout(3, 3));
+		// here the coding gridlayout actually arranges the components in the rectangular grid where they are displayed in rectangle
+		setLayout(new java.awt.FlowLayout());
+
+		for (int i = 0; i <= 2; i++)
+		{// here we are using a for loop in the coding to align the tabs int he coding 
+			for (int j = 0; j <= 2; j++)
+			{
+				javapanel[i][j] = new javax.swing.JPanel();
+				//assigning variable for the Jpanel in the javax swing JPanel
+				// assigning array list in the coding for the 
+				javapanel[i][j].setLayout(new java.awt.GridLayout(3, 3));
+				// here it sets up the layout as the 3X3 format of the coding 
+				np.add(javapanel[i][j]);
+				// we are assigning a new variable and again assigning it to another variable to make a call in the coding later 
+				javapanel[i][j].setBorder(new javax.swing.border.LineBorder(java.awt.Color.BLACK, 3, true));
+				// here we set the layout of bars and border of the java game
+			}
+
+
+		}
+
+
+		for (int i = 0; i < 9; i++)
+		{ // here we are using another for loop inside of the for loop to set the
+			for (int j = 0; j < 9; j++)
+			{
+				controller[i][j] = new JButton();
+				// assigning variable for the array list that is 2 dimensional in the coding game 
+				controller[i][j].setFont(face);
+				// here we are calling the variable f font 
+				controller[i][j].setText("  ");
+				// here we are adding two buttons in the loop and diving it into 3 types
+				javapanel[(i / 3)][(j / 3)].add(controller[i][j]);
+
+				controller[i][j].addActionListener(this);
+				//here add ActionListener takes the current class object as a parameter and this" key word simply means "this object I'm working in right now"
+				controller[i][j].setBackground(new java.awt.Color(255, 255, 153));
+				// now we are setting the background of the two dimensional array in the background 
+			}
+		}
+		initial();
+		/* initializing the code here by defining all the border font , 
+		 *fore background and everything that we will be using  
+		 **/
+		round.setBorder(new javax.swing.border.LineBorder(java.awt.Color.BLACK, 2, true));
+		// we set the JTextField variable as turn in the coding
+		round.setFont(face);
+		// here we are calling the turn variable java TextField and using the method setFont to call variable f in the turn 
+		round.setBackground(new java.awt.Color(255, 255, 153));
+		// here rwe are setting the background color of the java game
+		round.setForeground(java.awt.Color.BLUE);
+		// here we are setting the foreground as blue which shows the color of the gamers in the code
+		round.setHorizontalAlignment(0);
+		round.setText(Name1 + "'s turn");
+		// here we are making this thing pop up in the tab by putting the user input name and turn in the game
+		round.setEditable(false);
+		// now here we are adding and calling the turn varibale which stores the data in the gaming
+		add(round);
+		add(np);
+		//adding this in the gming code and calling it with array
+		np.setVisible(true);
+		//this method makes the method visible and is able to access later in the game to override
+	}
+
+	private int[] hpm(int playoff)
+	// here the private int array has playoff as the parameter 
+	// returning the dp value if the for value is satisfied and the for loop adds the variable x++ and y++
+	{
+		int a = -1;
+
+		int[] dp = { -1, -1 };
+
+		for (int i = 0; i <= 2; i++)
+		{
+			for (int j = 0; j <= 2; j++)
+			{
+				i++;
+				if (playoff == a)
+				{
+					dp[0] = i;
+					dp[1] = j;
+				}
+			}
+		}
+		return dp;
+	}
+
+	private int byteMark(int r, int c)
+	{
+		int i = -1;
+		for (int x = 0; x <= 2; x++)
+		{
+			for (int y = 0; y <= 2; y++)
+			{
+				i++;
+				if ((x == r) && (y == c))
+					return i;
+			}
+		}
+		return i;
+		/*
+		 * we are parameterizing the variable r and c and returning a value in the i iterating a for loop in the
+		 *
+		 *private int bytemark which is called later in the coding for the value 
+		 */
+	}
+	private void initial()
+
+	/* here this void method is private which means 
+	 *it does not return any type but returns the void method in the coding 
+	 *here it is defining all the border font
+	 */
+	{
+		//In this code snippet there are two loops, 
+		//for playoff =0, inside loop iterates for play off greater than 9. 
+		for (int playoff = 0; playoff < 9; playoff++)
+			//Using for loop here for the integer.
+			//Drawing the pieces for the board.
+		{
+			for (int x = 0; x <= 2; x++)
+			{
+				for (int y = 0; y <= 2; y++) {
+					game[playoff][x][y] = -1;
+				}
+			}
+			//using nested for loop 
+		}
+		//In this code snippet there are two loops, 
+		//for x =0, inside loop iterates for three times and printing sum of the value of x and y. 
+		for (int x = 0; x <= 2; x++)
+		{
+			for (int y = 0; y <= 2; y++) {
+				mainInterface[x][y] = -1;
+			}//method of using nested for loop again
+		}
+	}
+	/*
+	 * 
+	 * anubhavs coding 
+	 * 
+	 */
+
+	//designates the boolean primitive type which are only two possible values TRUE or FALSE only.
+	/**
+	 * @param r
+	 * @param c
+	 * @return
+	 * we are parameterizing the variable r and c and returning a value in the i
+	 * iterating a for loop in the private int bytemark which is called later in the coding for the value 
+	 */
+
+	private boolean isNear(int x, int y) {
+		//the x and y coordinate of the points of the playoff.
+		int playoff = playoffNumber(x, y);
+		int[] position = positionInBoard(x, y);
+		if (game[playoff][position[0]][position[1]] < 0)
+			return false;
+		return true;
+		//returning true of false
+	}
+
+	////designates the boolean primitive type which are only two possible values TRUE or FALSE only.
+	private boolean playoffisSolved(int playoff)
+	{
+
+		//hpm stores integers.
+		int[] position = hpm(playoff);
+		//using if statement if it comes less or equals to 0, to get the return value.
+		if (mainInterface[position[0]][position[1]] >= 0)
+			return true;
+		return false;
+		//returning true of false statement
+	}
+
+
+
+	///This method finds the sum of digits of odd places
+	private boolean isB_Filled(int playoff)
+	{
+		//using for loop here
+		////In this code snippet there are two loops, 
+		//for x =0, inside loop iterates for three times and printing sum of the value of x and y. 
+		for (int x = 0; x <= 2; x++)
+		{
+			for (int y = 0; y <= 2; y++)
+			{
+				if (game[playoff][x][y] < 0)
+					return false;
+			}//using nested for loop
+		}
+		return true;
+		//returning the value if it is true
+	}
+
+	private int GameOver(int playoff)
+	{
+		//using for loop method to end the game here
+		for (int player = 0; player <= 1; player++)
+		{
+			boolean GameOver = true;
+			// here we are defining variable as a boolean to later invoke and use it in the coding 
+			for (int x = 0; x <= 2; x++)
+			{// trying to iteraete the for loop for the game playoff between 2 dimensional array in the coding 
+				if (game[playoff][x][x] != player)
+					// given if the statement is not satisfied print false
+					GameOver = false;
+				///conforming the game if it is true or false by the user input
+			}
+			if (GameOver) {
+				// here the if method is iterated and the variable isSolved is called upon
+				return player;
+				// if this is satisfied then it returns the player in the coding 
+
+			}
+			GameOver = true;
+			// if satisfied then the variable is true 
+			for (int x = 0; x <= 2; x++)
+			{
+				if (game[playoff][x][(2 - x)] != player)
+					GameOver = false;
+				//here the game variable is refering it to the arrays int x and given a loop
+			}
+			if (GameOver) {
+				// given the loop the variable player is called 
+				return player;
+				// variable player is returned 
+			}
+			for (int x = 0; x <= 2; x++)
+			{// for a given loop x is equal to 2 then the given loop iterates
+				GameOver = true;
+				// if the variable is true then it iterates in the loop 
+				//using for loop for the result in the coding if another value then it goes in the loop 
+				for (int y = 0; y <= 2; y++)
+				{
+					if (game[playoff][x][y] != player)
+						GameOver = false;
+				}
+				if (GameOver) {
+					return player;
+				}
+				GameOver = true;
+				for (int y = 0; y <= 2; y++)
+				{
+					if (game[playoff][y][x] != player)
+						GameOver = false;
+				}
+				if (GameOver)
+					return player;
+			}
+		}
+		return -1;
+		//
+	}
+	/*
+	 * creating a method in the game for the game over part of the coding 
+	 * calling the variable  for the boolean value and connecting it the main game of the coding  
+	 * if the loop is satisfied it the game is over and if not then it goes into another loop in the game 
+	 * 
+	 */
+
+	private int GameOver()
+	//Method to give an access modifier
+	//variables that are visible only to the class to which they belong
+	// and these variable only accessible by GameOver 
+	{
+		int playerReturning = -1;
+		// 
+		for (int player = 0; player <= 1; player++)
+		{
+			boolean GameOver = true;
+			for (int x = 0; x <= 2; x++)
+			{
+				if ((mainInterface[x][x] != 2) && (mainInterface[x][x] != player))
+					GameOver = false;
+			}
+			if (GameOver)
+			{
+				if (playerReturning == 0)
+					return 2;
+				playerReturning = player;
+			}
+			else
+			{
+				GameOver = true;
+				for (int x = 0; x <= 2; x++)
+				{
+					if ((mainInterface[x][(2 - x)] != 2) && (mainInterface[x][(2 - x)] != player))
+						GameOver = false;
+				}
+				if (GameOver)
+				{
+					if (playerReturning == 0)
+						return 2;
+					playerReturning = player;
+				}
+				else
+				{
+					for (int x = 0; x <= 2; x++)
+					{
+						GameOver = true;
+						for (int y = 0; y <= 2; y++)
+						{
+							if ((mainInterface[x][y] != 2) && (mainInterface[x][y] != player))
+								GameOver = false;
+						}
+						if (GameOver)
+						{
+							if (playerReturning == 0)
+								return 2;
+							playerReturning = player;
+							break;
+						}
+
+						GameOver = true;
+						//// for loop for integer y starting at 0, ending at greater or equals to 2, increasing
+						for (int y = 0; y <= 2; y++)
+						{
+							if ((mainInterface[y][x] != 2) && (mainInterface[y][x] != player))
+								GameOver = false;
+						}
+						if (GameOver)
+						{
+							if (playerReturning == 0)
+								return 2;
+							playerReturning = player;
+							break;
+						}
+					}
+				} } }
+		return playerReturning;
+	}
+
+	/*designates the boolean primitive type which are only two possible values 
+		TRUE or FALSE only			private boolean playoffisSolved(int playoff)
+	 * 
+	 * 
+	 */
+
+	private int playoffNumber(int x, int y)
+	//access a private modifier  
+	{
+		if (x < 3)
+		{
+			if (y < 3)
+				return 0;
+			if (y < 6)
+				return 1;
+			return 2;
+		}
+		if (x < 6)
+		{
+			if (y < 3)
+				return 3;
+			if (y < 6)
+				return 4;
+			return 5;
+		}
+		if (y < 3)
+			return 6;
+		if (y < 6)
+			return 7;
+		return 8;
+		// returnig the only true and false boolean value of the coding .
+	}
+
+	/*Brians code in the gaming 
+	 *  method that gives the game dimensions based on what tic-tack-toe section you are on
+	 *
+	 */
+
+	private int[][] scale(int playoff)
+	{
+		// starting off every variable at -1
+		int a = -1;int b = -1;int c = -1;int d = -1;
+		if (playoff == 0)
+		{ //if its the first tic-tack-toe board, the variables get assigned to these values
+			a = 0;
+			b = 0;
+			c = 2;
+			d = 2;
+		}
+		if (playoff == 1)
+		{//if its the 2nd tic-tack-toe board, the variables get assigned to these values
+			a = 0;
+			b = 3;
+			c = 2;
+			d = 5;
+		}
+		if (playoff == 2)
+		{//if its the 3rd tic-tack-toe board, the variables get assigned to these values
+			a = 0;
+			b = 6;
+			c = 2;
+			d = 8;
+		}
+		if (playoff == 3)
+		{//if its the 4th tic-tack-toe board, the variables get assigned to these values
+			a = 3;
+			b = 0;
+			c = 5;
+			d = 2;
+		}
+		if (playoff == 4)
+		{//if its the 5th tic-tack-toe board, the variables get assigned to these values
+			a = 3;
+			b = 3;
+			c = 5;
+			d = 5;
+		}
+		if (playoff == 5)
+		{//if its the 6th tic-tack-toe board, the variables get assigned to these values
+			a = 3;
+			b = 6;
+			c = 5;
+			d = 8;
+		}
+		if (playoff == 6)
+		{//if its the 7th tick-tack-toe board, the variables get assigned to these values
+			a = 6;
+			b = 0;
+			c = 8;
+			d = 2;
+		}
+		if (playoff == 7)
+		{//if its the 8th tick-tack-toe board, the variables get assigned to these values
+			a = 6;
+			b = 3;
+			c = 8;
+			d = 5;
+		}
+		if (playoff == 8)
+		{//if its the 9th tic-tack-toe board, the variables get assigned to these values
+			a = 6;
+			b = 6;
+			c = 8;
+			d = 8;
+		}
+		// returns a 2D array with the specific variable values related to which playoff you are on
+		int[][] dp = { { a, b }, { c, d } };
+		return dp;
+	}
+
+	// position in board method that returns an array, indicating where you are in the ultimate tic-tack-toe board
+
+	private int[] positionInBoard(int r, int c)
+	{
+		// takes two integers runs them through a method called PlayoffNumber, which takes the integers and based on their values,
+		// returns a specific integer
+		int playoff = playoffNumber(r, c);
+		int[][] position = scale(playoff);
+		int a = 0;
+		int[] dp = { -1, -1 };
+		for (int x = position[0][0]; x <= position[1][0]; a++)
+		{
+			int b = 0;
+			for (int y = position[0][1]; y <= position[1][1]; b++)
+			{
+				if ((r == x) && (y == c))
+				{
+					dp[0] = a;
+					dp[1] = b;
+					return dp;
+				}
+				// both x and y get increased
+				y++;
+			}
+			x++;
+		}
+		return dp;
+	}
+
+	// non returnable method called input that takes 3 integers as parameters
+	private void input(int x, int y, int number)
+	{
+		//finds which playoff the values are from
+		int playoff = playoffNumber(x, y);
+		// locates the position in the board
+		int[] position = positionInBoard(x, y);
+		game[playoff][position[0]][position[1]] = number;
+	}
+
+	// simple yes or no method that takes into account if all spots are taken
+	private boolean mainInterfaceFull()
+	{
+		// integer x is on a for loop
+		for (int x = 0; x <= 2; x++)
+		{ // integer y is on a for loop
+			for (int y = 0; y <= 2; y++)
+			{  //checks to see if the game at indexes x and y are less than zero
+				// if so, return false
+				if (mainInterface[x][y] < 0)
+					return false;
+			}
+		} // otherwise return true
+		return true;
+	}
+	// no returnable method that disables the playoffs that your not allowed to play in
+	private void disableAllplayoffs(boolean color)
+	{		// for loop for integer x starting at 0, ending at 9
+		for (int x = 0; x < 9; x++)
+		{	// for loop for integer x starting at 0, ending at 9
+			for (int y = 0; y < 9; y++)
+			{ // using a tool button that doesn't allow a mouse click in that area
+				controller[x][y].setEnabled(false);
+			}
+		}
+		if (color) { //is a color is passed, it calls the method below
+			finishedColor();
+		}
+	}
+	private void finishedColor() {
+		for (int q = 0; q <= 8; q++)
+		{
+			colorPlayOff(q, 4);
+		}
+
+	}
+	// non returnable method that opens all playoffs for the user to play in
+	private void enableAllplayoffs() {
+		// for loop for integer x starting at 0, ending at 9, increasing
+		for (int x = 0; x < 9; x++)
+		{   // for loop for integer y starting at 0, ending at 9, increasing
+			for (int y = 0; y < 9; y++)
+			{	//tool uses to enable click action within x and y
+				controller[x][y].setEnabled(true);
+			}
+		}
+	}
+	// method created to change the color of the tic-tac-toe board
+	private void colorPlayOff(int playoff, int numbers)
+	{
+		if (((numbers == 4) || (numbers == 5) || (numbers == 3)) && (playoffisSolved(playoff)))
+			return;
+		int[][] position = scale(playoff);
+		for (int i = position[0][0]; i <= position[1][0]; i++)
+		{
+			for (int j = position[0][1]; j <= position[1][1]; j++)
+			{
+				if (numbers == 0)
+					//if the number is equal to zero, use java.awt.color to change to a specific color
+				{
+					controller[i][j].setBackground(new java.awt.Color(185, 220, 120));
+				}
+				else if (numbers == 1)
+					//if the number is equal to zero, use java.awt.color to change to a specific color
+				{
+					controller[i][j].setBackground(new java.awt.Color(200, 230, 250));
+				}
+				else if (numbers == 2)
+					//if the number is equal to zero, use java.awt.color to change to a specific color
+				{
+					controller[i][j].setBackground(new java.awt.Color(170, 120, 70));
+				}
+				else if (numbers == 3)
+					//if the number is equal to zero, use java.awt.color to change to this grey-ish color
+				{
+					controller[i][j].setBackground(new java.awt.Color(230, 230, 230));
+					for (int g = 0; g <= 8; g++)
+					{	// if integer g does not equal a playoff area to play
+						if (g != playoff) {
+							// calls the method colorPlayoff, using the g as a variable and 4 as an int value
+							colorPlayOff(g, 4);
+						}
+					}
+				} else if (numbers == 4)
+					//if the number is equal to zero, use java.awt.color to this yellowish color
+				{
+					controller[i][j].setBackground(new java.awt.Color(255, 255, 153));
+				}
+				else if (numbers == 5)
+					//if the number is equal to five, use java.awt.color to change to this greyish color
+				{
+					controller[i][j].setBackground(new java.awt.Color(230, 230, 230));
+				}
+			}
+		}
+	}
+
+
+
+
+	// prasads code 
+
+
+
+
+	public void actionPerformed(java.awt.event.ActionEvent evt) 
+	// Provides interfaces and classes for dealing with different types of events fired by AWT components.
+	{ 
+		//// Contains all of the classes for creating user interfaces and for painting graphics and images.
+		for (int x = 0; x < 9; x++) // loops for AI and player
+			// loop i
+		{
+			for (int y = 0; y< 9; y++) 
+				// loop j
+			{
+				int playoff = playoffNumber(x, y); 
+				// shows the msg according to the wins/ placements where player can play
+				if ((controller[x][y] == evt.getSource()) && (!isNear(x, y))) 
+					// it will get the previous information what and when it was played
+				{
+					if ((unavoidable) && (buttonPressed) && (another != playoff))
+						// the code will show the "Add button is pressed" message when I press "Checkout" button after I press "Add" button but If the 
+						// "Add" Button is not pressed before the "Checkout" Button is pressed, the code will show the "Add Button is not pressed" message.
+					{
+						if (player1) { 
+							// on the player side (Dialogs pop ups)
+							JOptionPane.showMessageDialog(this, "It's not your turn , " + Name1 + "!"); 
+							// Player is playing on wrong board 
+						} else
+							JOptionPane.showMessageDialog(this, "It is not your turn , AI"); 
+						// AI: you are not in the right board
+						return;
+					}
+					if (!buttonPressed) 
+						// // the code will show the "Add button is pressed" message when I press "Checkout" button after I press "Add" button but If the 
+						// "Add" Button is not pressed before the "Checkout" Button is pressed, the code will show the "Add Button is not pressed" message.
+						// dialogs part (Dialogs pop ups)
+						buttonPressed = true; 
+					// boolean true and the player turn is over
+					if (GameOver(playoff) >= 0) 
+						// when it done playing
+					{
+						if (player1) 
+							// its on the players turns 
+						{
+							if (GameOver(playoff) == 0) 
+								// // makes it easy to pop up a standard dialog box that prompts users
+							{
+								JOptionPane.showMessageDialog(this, "This playoff is already won by the AI"); 
+								// this is where player can not play because its won by AI
+							}
+							else if (GameOver(playoff) == 1) 
+								// on player side
+							{
+								JOptionPane.showMessageDialog(this, "This playoff is already won by you, " + Name1 + "!");
+								// this is where player cant play because player has already won on this board
+							}
+
+
+						} 
+						// tageted the AI sides of the game and dialogs pop up windows 
+						else if (GameOver(playoff) == 0) 
+							// on side of the AI
+						{
+							JOptionPane.showMessageDialog(this, "This playoff is already won by you, AI!"); 
+							// this board the already won by AI. thats why player can not play on this
+						}
+						else if (GameOver(playoff) == 1) 
+							// on player side
+						{
+							JOptionPane.showMessageDialog(this, "This playoff is already won by " + Name1 + "!"); 
+							// this is where player cant play because player has already won on this board 
+						}
+
+						return; 
+						// end of dialogs 
+					}
+					if (player1) 
+						// it add colours to the background  of "X"
+					{
+						controller[x][y].setForeground(java.awt.Color.RED); 
+						// player plays as red color 
+						controller[x][y].setText("X"); 
+						// the latter X will be played in the color red
+						h += 1;
+						input(x,y, 1); 
+						// input location for the player
+						player1 = false; 
+						// boolean value when the player is done playing and it AI turn now
+						round.setText("AI's TURN !!"); 
+						// done with players ,now its AI's turn
+						round.setForeground(java.awt.Color.RED); 
+						// bot dialog box colour
+					}
+					else 
+						// setup the color
+					{
+						controller[x][y].setForeground(java.awt.Color.BLUE); 
+						// AI plays in the Colour blue ie "O"
+						controller[x][y].setText("0"); 
+						// AI will be always be played as "O" in game
+						this.r += 1; 
+						// played by AI
+						input(x, y, 0); 
+						// update the location
+						player1 = true; 
+						// now its players turn
+						round.setText(Name1 + "'s TURN !!"); 
+						// Shows the next turn 
+						round.setForeground(java.awt.Color.RED); 
+						// dialog box colour is red
+					}
+					alternate += 1;
+					// turns and positions alterations
+					int[] position = hpm(playoff); 
+					// player position
+					int r = position[0];int c = position[1]; 
+					// // Ai position
+					if (GameOver(playoff) >= 0) 
+						/// add more dialogs // when the board is won by anyone it shows/ pop up this dialog boxes 
+					{
+						if (GameOver(playoff) == 0) 
+							// AI won on this board 
+						{
+							colorPlayOff(playoff, 0);
+							mainInterface[r][c] = 0;
+							JOptionPane.showMessageDialog(this, "AI Wins this playoff\nThis playoff will be counted as \"AI\""); 
+							// AI won this board and the finally board is locked but can played but cant win on this board
+						}
+						else if (GameOver(playoff) == 1)  
+							// all the boxes are fill and the game is tied 
+						{
+							colorPlayOff(playoff, 1);
+							mainInterface[r][c] = 1;
+							JOptionPane.showMessageDialog(this, Name1 + " Wins this playoff\nThis playoff will be counted as \"" + Name1 + "'s\""); 
+							// player wins on this part and board is won by the player// even if its playable Ai can not win on this board
+						}
+						if (!gameWork()) {}
+
+					}
+					else if (isB_Filled(playoff)) 
+						// shows the box is tied 
+					{
+						colorPlayOff(playoff, 2);
+						mainInterface[r][c] = 2;
+						JOptionPane.showMessageDialog(this, "This playoff is tied\nThis playoff will be counted for both players"); 
+						// box is tied and no one can play on this board an dthe board is fully locked
+						if (gameWork())
+							return;
+						if (GameOver() >= 0) 
+							// final part // the board is locked and can not be playe don this
+						{
+							if (GameOver() == 0)  
+								// AI wins the game and win goes to AI but play can and can not be played on this
+							{
+								JOptionPane.showMessageDialog(this, "AI wins the game!");
+								// dailogs box for the AI pop ups 
+								round.setText("AI wins!");
+								// dailogs for AI
+								setVisible(false); 
+								// it marks the component visible
+
+							}
+							else if (GameOver() == 1) 
+								// player wins the game
+							{
+								JOptionPane.showMessageDialog(this, Name1 + " wins the game!");
+								// dailog box will pop up for the player when it wins the game or board box
+								round.setText(Name1 + " wins!");
+								// pop up dialogs for player wins!!
+								setVisible(false);
+								// Boolean value trun false and its done and recored 				
+							}
+							// dissalbes all the playvibility of any and lock the board and passes wins or ties
+							disableAllplayoffs(true);
+							return;
+							// end
+						}
+						if (mainInterfaceFull()) 
+							// its that the game is tied
+						{
+							disableAllplayoffs(true);
+							// turn to game ties part
+							round.setText("Game tied!");
+							// shows the dialogs box for the game tied
+							setVisible(false);
+							// done showing
+						}
+					}
+					int[] ops = positionInBoard(x, y); 
+					// tracks the placements on board 
+					int hog  = byteMark(ops[0], ops[1]);
+					// updated the location when it was being played and who won on it
+					if (!playoffisSolved(hog))
+					{
+						another = hog; 
+						// Java Scanner class which finds and returns the next complete token
+						colorPlayOff(hog, 3);
+						unavoidable = true; 
+						// forced to use raw types in its method signatures and return types because the methods it overrides from a super type
+					}
+					// just to the other conditions
+					else
+					{
+						unavoidable = false; 
+						//// forced to use raw types in its method signatures and will not return types because the methods it overrides from a super type
+						for (int q = 0; q <= 8; q++) {
+							colorPlayOff(q, 5);
+						}
+					}
+					if (!player1)
+						// on the player side
+					{
+						disableAllplayoffs(false);
+						//to create the pause in the middle of the play
+						java.util.Timer timer = new java.util.Timer(); 
+						// threads to schedule tasks for future execution in a background thread
+						Beginner.AIWork timer1 = new Beginner.AIWork(); // timer
+						timer1.take(hog, x, y);
+						// Timer is a utility class that can be used to schedule a thread to be executed at certain time in future. 
+						// Java Timer class can be used to schedule a task to be run one-time or to be run at regular intervals
+						int wait; // instance method that's used for thread synchronization
+						if (another <= 30) {
+							// set up the timer
+							wait = 500 + (int)(Math.random() * 1501.0D); } 
+						// Simply put, wait() is an instance method that's used for thread synchronization. 
+						else { 
+							if ( another <= 60) {
+								wait = 2000 + (int)(Math.random() * 1501.0D);
+							} else
+								wait = 3000 + (int)(Math.random() * 2001.0D); }
+						timer.schedule(timer1, wait);
+					} // end
+					return; 
+					// timer end
+				}
+			} // end
+		}
+	} // end of the method
+
+	private boolean gameWork() 
+	// boolean values which returns only true or false
+	{
+		int result = GameOver(); 
+		// end of game part
+		if (GameOver() >= 0)
+			// all the box are played or AI or player got 3 on rows// it will shows the dialogs accordingly
+		{
+			switch (result)
+			// sees who wins and shows the dialogs box accordingly 
+			{
+			// Use the switch statement to select one of many code blocks to be executed.
+			case 0: 
+				// shows when AI wins the game
+				JOptionPane.showMessageDialog(this, "AI wins the game!");
+				// Dialogs pop up for msg for AI wins
+				round.setText("AI wins!");
+				// text for AI and update
+				setVisible(false);
+				//done
+
+			case 1:
+				// Use the switch statement to select one of many code blocks to be executed.
+				// shows when player wins the game
+				JOptionPane.showMessageDialog(this, Name1 + " wins the game!");
+				// dialogs pop up for player who just won the game 
+				round.setText(Name1 + " wins!");
+				// update the text
+				setVisible(false);
+				// done for the player 
+
+			case 2: 
+				// Use the switch statement to select one of many code blocks to be executed.
+				// game is tied
+				JOptionPane.showMessageDialog(this, " The game is tied. ");
+				// shows the dialog pop up for the game which just got tied
+				round.setText("Game is tied!");
+				//update the text for game being tied
+				setVisible(false);
+				// done for the game and got end
+			}
+			// stop the game //end it/ re-oppening is nessesory
+			disableAllplayoffs(true);
+			// boolean turn positive and finished the game
+			return true; 
+			// end of the end of the game
+		}
+		if (mainInterfaceFull()) 
+			// its  boolean method
+		{
+			disableAllplayoffs(true);
+			// no one can play the game as the game is already won 
+			round.setText("Game is tied!");
+			// text update game tied
+			setVisible(false);
+			// end of the boolean 
+		}
+		return false;
+		// end
+	}// end of the methode 
+	// end of Prasads coding 
+	/*
+	 * start of the coding for Riley in the game 
+	 * main method of the body is created and
+	 *  also a class named AI is introduced for the Computer AI work
+	 * 
+	 * 
+	 */
+
+
+	public static void main(String[] args)
+
+	//Start of the main method   
+
+	{
+		String p1 = JOptionPane.showInputDialog("Enter Player 1: "); //pops up a dialog box and asks the user to input their name
+		if (p1 == null)
+		{  
+			return;
+		}
+		p1 = p1.trim(); 
+
+		//Trims spaces out of player name
+		Name1 = p1.length() <= 1 ? "Player1" : p1; 
+
+		//sets the variable Name1 to player1
+		Beginner object = new Beginner();
+
+		// creates a beginner object
+		object.setDefaultCloseOperation(3);
+		object.setVisible(true);
+
+		//object window is visible
+		object.setSize(520, 515); 
+
+		//sets the size of the window object
+		object.setResizable(false);
+
+		// object is not resizable to the user
+	}
+
+	class AIWork extends java.util.TimerTask
+
+	//A task that can be scheduled for one-time or repeated execution by a timer
+	{
+		int[][] position;
+		//creates a 2D int array position
+
+		int playoff;
+		int aaa;	
+		int bbb;
+		//created 3 different ints for AIWork
+		AIWork() {} 
+
+		public void take(int board, int aa, int bb) 
+		{
+			playoff = board;
+			aaa = aa;
+			bbb = bb;
+			position = Beginner.this.scale(playoff);
+		}
+
+		public void run() 
+
+		//method run is being created in AIWork
+		{
+			if (Fill())
+				return;
+			int x = -1;
+			int y = -1;
+		
+			//Int's created for use in run
+
+			int high = 8;
+			int low = 0; 
+			int low1 = 0;
+			int high1 = 8;
+			if (unavoidable)
+			{
+				low = position[0][0];
+				high = position[1][0];    
+
+				//int's set equal to position arrays
+
+				low1 = position[0][1];
+				high1 = position[1][1];
+				int index = -1;
+
+				//index is set to -1
+
+				boolean here = false; 
+
+				//here is set to false 
+
+				for (int i = low; i <= high; i++) 
+				{
+					for (int j = low1; j <= high1; j++)
+					{
+						index++; 
+						if (index == playoff)	
+
+							//index is set to gameBoard
+						{
+							if (Beginner.this.isNear(i, j)) 
+
+								//beginner.isNear is being called, set to (i, j) here becomes true
+							{
+								here = true; 
+							}
+							x = i;
+
+							//a being set to i
+
+							y = j; 
+
+							// b is being set to j
+						}
+					}
+				}
+				if (here)
+				{
+					for (;;)
+
+						// infinite loop
+					{
+						x = low + (int)(Math.random() * (high - low + 1));
+
+						//a is being calculated
+						y = low1 + (int)(Math.random() * (high1 - low1 + 1));
+
+						//b is being calculated
+						if (!Beginner.this.isNear(x, y)) {
+
+							//Beginner.isNear is being called, a,b is the position selected // '!' makes the oposite happen
+							break; 
+
+							//breaks the infinite loop
+						}
+					}
+				}
+			}
+			else {
+				boolean finish = false;
+
+				//finish is being set to false
+
+				for (int allTheBoards = 0; allTheBoards <= 8; allTheBoards++)
+
+					//int allTheBoards being created
+				{
+					if (!Beginner.this.playoffisSolved(allTheBoards)) 
+
+						/*
+						 * Beginner.playoffisSolved is being called,
+						 * 
+						 *  passing allTheBoards to playoffisSolvved
+						 */
+					{
+						int[][] location = Beginner.this.scale(allTheBoards);
+
+						/*Beginner.scale is being called,
+						 *location is the location in which the AI choose to put an O
+						 *
+						 */
+						int cc = location[0][0];
+						int dd = location[1][0]; 	
+						int cc1 = location[0][1];		
+
+						//ints being created for location in the boxes
+						int dd1 = location[1][1];
+						int index = -1;
+						for (int r = cc; r <= dd; r++)  
+						{
+							for (int p = cc1; p <= dd1; p++)
+							{
+								index++; 
+								if (index == allTheBoards) 
+
+									//index is set to equal allTheBorads
+								{
+									if (!Beginner.this.isNear(r, p)) 
+
+										//beginner.isNear is being called, is set to (r, p), finish becomes true
+									{
+										x = r;
+
+										//a is being set to r
+										y = p;
+
+										//b is being set to p
+
+										finish = true; 
+									}
+								}
+							}
+						}
+					}
+				}
+				if (!finish) 
+				{
+					for (;;) //infinite loop
+					{
+						x = low + (int)(Math.random() * (high - low + 1)); 
+
+						// a is being calculated 
+						y = low1 + (int)(Math.random() * (high1 - low1 + 1));
+
+						// b is being calculated
+						if ((!Beginner.this.isNear(x, y)) && (Beginner.this.GameOver(Beginner.access$300(Beginner.this, x, y)) < 0)) 
+
+							//beginner.isNear & beginner.GameOver nested beginner.access$300
+							break; 
+
+						//breaks the infinite loop
+					}
+				}
+			}
+			Beginner.this.enableAllplayoffs();
+			controller[x][y].doClick(); 
+
+			// creates a click as if the user has in which the AI places an O
+		} 
+
+		// End of the run method here 
+
+		public int[] copy(int[] i) 
+
+		//creates an int array copy 
+		{
+			int[] j = new int[i.length];
+
+			// int[] j is created as a new int with i.length as the parameter
+			for (int x = 0; x < i.length; x++)
+
+				j[x] = i[x];
+
+			return j;
+		}
+
+		public int[][] copy(int[][] i) 
+
+		//creates a 2D int array copy
+		{
+			int[][] j = new int[i.length][i[0].length]; 
+
+			// int[][] j is created as a new int with i.length as the parameter
+
+			for (int x = 0; x < i.length; x++)
+				j[x] = copy(i[x]);
+			return j;
+		}
+
+		public int[][][] copy(int[][][] i)
+
+		/*
+		 * here we are creating a pub;lic int 
+		 * which is a 3 dimensional array list containing of i
+		 * int array copy
+		 */
+		{
+			int[][][] j = new int[i.length][i[0].length][i[0][0].length];
+
+			// int[][][] j is created as a new int with i.length as the parameter
+			for (int x = 0; x < i.length; x++)
+
+				j[x] = copy(i[x]);
+
+			return j;
+
+		}
+
+		public boolean Fill() 
+
+		//method fill is being created inside of AIWork
+		{
+			for (int t = 0; t <= 2; t += 2)  
+			{
+				if (unavoidable) 
+				{
+					for (int x = position[0][0]; x <= position[1][0]; x++)
+					{
+						for (int y = position[0][1]; y <= position[1][1]; y++)
+						{
+							if (!Beginner.this.isNear(x, y)) 
+
+								//Beginner.isNear is being called
+							{
+								int[][][] gameFinal = copy(game);
+
+								// a 3D int array final_game is being set to copy(game)
+								int[][] mainGameFinal = copy(mainInterface); 
+
+								//a 2D int array final_mainGame is being set to copy(mainInterface)
+								Beginner.this.input(x, y, 0);
+								if ((Beginner.this.GameOver(playoff) == 0) || (Beginner.this.isB_Filled(playoff))) 
+
+									//Beginner.GameOver is being called gameboard being equal to 0 or beginner.isB_FIlled 
+								{
+									game = gameFinal;;
+
+									//game is set to final_game
+									mainInterface = mainGameFinal;
+
+									//mainInterface is being set to final_mainGame
+									Beginner.this.enableAllplayoffs(); 
+
+									//Beginner.enableAllplayoffs is being called
+									controller[x][y].doClick(); 
+
+									// creates a click as if the user has thats where the AI sets an O
+									return true;
+								}
+								game = gameFinal;;
+
+								//game is being set to final_game
+								mainInterface = mainGameFinal; 
+
+								//mainInterface is being set to final_mainGame
+							}
+
+						}
+
+					}
+				} else {
+					for (int x = 0; x <= 8; x++)
+					{
+						for (int y = 0; y <= 8; y++)
+						{
+							if ((!Beginner.this.isNear(x, y)) && (!Beginner.this.playoffisSolved(Beginner.access$300(Beginner.this, x, y)))) 
+
+								//!Beginner.isNear is being called & !Beginner.playoffisSolved nested in access$300
+							{
+								int[][][] gameFinal = copy(game);
+
+								//a 3D int array keep_game is created and set equal to copy(game)
+								int[][] mainGameFinal = copy(mainInterface); 
+
+								// a 2D int array keep_MainGame is created and set equal to copy(MainInterface)
+								Beginner.this.input(x, y, 0); 
+								//Beginner.input is called and has parameters
+
+								if ((Beginner.this.GameOver(Beginner.access$300(Beginner.this, x,y)) == 0) || (Beginner.this.isB_Filled(Beginner.access$300(Beginner.this, x, y))))
+								{
+									game = gameFinal; 
+
+									//game is set equal to keep_game
+									mainInterface = mainGameFinal; 
+
+									// mainInterface is set equal to keep_mainGame
+									Beginner.this.enableAllplayoffs(); 
+
+									//Beginner.enableAllplayoffs is called 
+									controller[x][y].doClick(); 
+
+									// creates a click as if the user has thats where the AI sets an O
+									return true;
+								}
+								game = gameFinal; 
+
+								//game is set equal to keep_game
+								mainInterface = mainGameFinal; 
+
+								//mainInterface is set equal to keep_mainGame
+							}
+						}
+					}
+				}
+			}
+			return false;
+			// returning the false value if the loop in the coding is not satisfied 
+		}
+	}
+
+	public static int access$300(Beginner beginner, int x, int y) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+}
