@@ -1,0 +1,297 @@
+	public void actionPerformed(java.awt.event.ActionEvent evt) 
+	// Provides interfaces and classes for dealing with different types of events fired by AWT components.
+	{ 
+		//// Contains all of the classes for creating user interfaces and for painting graphics and images.
+		for (int i = 0; i < 9; i++) // loops for AI and player
+			// loop i
+		{
+			for (int j = 0; j< 9; j++) 
+				// loop j
+			{
+				int playoff = playoffNumber(i, j); 
+				// shows the msg according to the wins/ placements where player can play
+				if ((button[i][j] == evt.getSource()) && (!isNear(i, j))) 
+					// it will get the previous information what and when it was played
+				{
+					if ((unavoidable) && (buttonPressed) && (next != playoff))
+						// the code will show the "Add button is pressed" message when I press "Checkout" button after I press "Add" button but If the 
+						// "Add" Button is not pressed before the "Checkout" Button is pressed, the code will show the "Add Button is not pressed" message.
+					{
+						if (player1) { 
+							// on the player side (Dialogs pop ups)
+							JOptionPane.showMessageDialog(this, "It's not your turn , " + Name1 + "!"); 
+							// Player is playing on wrong board 
+						} else
+							JOptionPane.showMessageDialog(this, "It is not your turn , AI"); 
+						// AI: you are not in the right board
+						return;
+					}
+					if (!buttonPressed) 
+						// // the code will show the "Add button is pressed" message when I press "Checkout" button after I press "Add" button but If the 
+						// "Add" Button is not pressed before the "Checkout" Button is pressed, the code will show the "Add Button is not pressed" message.
+						// dialogs part (Dialogs pop ups)
+						buttonPressed = true; 
+					// boolean true and the player turn is over
+					if (GameOver(playoff) >= 0) 
+						// when it done playing
+					{
+						if (player1) 
+							// its on the players turns 
+						{
+							if (GameOver(playoff) == 0) 
+								// // makes it easy to pop up a standard dialog box that prompts users
+							{
+								JOptionPane.showMessageDialog(this, "This playoff is already won by the AI"); 
+								// this is where player can not play because its won by AI
+							}
+							else if (GameOver(playoff) == 1) 
+								// on player side
+							{
+								JOptionPane.showMessageDialog(this, "This playoff is already won by you, " + Name1 + "!");
+								// this is where player cant play because player has already won on this board
+							}
+
+
+						} 
+						// tageted the AI sides of the game and dialogs pop up windows 
+						else if (GameOver(playoff) == 0) 
+							// on side of the AI
+						{
+							JOptionPane.showMessageDialog(this, "This playoff is already won by you, AI!"); 
+							// this board the already won by AI. thats why player can not play on this
+						}
+						else if (GameOver(playoff) == 1) 
+							// on player side
+						{
+							JOptionPane.showMessageDialog(this, "This playoff is already won by " + Name1 + "!"); 
+							// this is where player cant play because player has already won on this board 
+						}
+
+						return; 
+						// end of dialogs 
+					}
+					if (player1) 
+						// it add colours to the background  of "X"
+					{
+						button[i][j].setForeground(java.awt.Color.RED); 
+						// player plays as red color 
+						button[i][j].setText("X"); 
+						// the latter X will be played in the color red
+						h += 1;
+						input(i, j, 1); 
+						// input location for the player
+						player1 = false; 
+						// boolean value when the player is done playing and it AI turn now
+						turn.setText("AI's TURN !!"); 
+						// done with players ,now its AI's turn
+						turn.setForeground(java.awt.Color.RED); 
+						// bot dialog box colour
+					}
+					else 
+						// setup the color
+					{
+						button[i][j].setForeground(java.awt.Color.BLUE); 
+						// AI plays in the Colour blue ie "O"
+						button[i][j].setText("0"); 
+						// AI will be always be played as "O" in game
+						this.r += 1; 
+						// played by AI
+						input(i, j, 0); 
+						// update the location
+						player1 = true; 
+						// now its players turn
+						turn.setText(Name1 + "'s TURN !!"); 
+						// Shows the next turn 
+						turn.setForeground(java.awt.Color.RED); 
+						// dialog box colour is red
+					}
+					alternate += 1;
+					// turns and positions alterations
+					int[] position = hpm(playoff); 
+					// player position
+					int r = position[0];int c = position[1]; 
+					// // Ai position
+					if (GameOver(playoff) >= 0) 
+						/// add more dialogs // when the board is won by anyone it shows/ pop up this dialog boxes 
+					{
+						if (GameOver(playoff) == 0) 
+							// AI won on this board 
+						{
+							colorPlayOff(playoff, 0);
+							mainInterface[r][c] = 0;
+							JOptionPane.showMessageDialog(this, "AI Wins this playoff\nThis playoff will be counted as \"AI\""); 
+							// AI won this board and the finally board is locked but can played but cant win on this board
+						}
+						else if (GameOver(playoff) == 1)  
+							// all the boxes are fill and the game is tied 
+						{
+							colorPlayOff(playoff, 1);
+							mainInterface[r][c] = 1;
+							JOptionPane.showMessageDialog(this, Name1 + " Wins this playoff\nThis playoff will be counted as \"" + Name1 + "'s\""); 
+							// player wins on this part and board is won by the player// even if its playable Ai can not win on this board
+						}
+						if (!gameWork()) {}
+
+					}
+					else if (isB_Filled(playoff)) 
+						// shows the box is tied 
+					{
+						colorPlayOff(playoff, 2);
+						mainInterface[r][c] = 2;
+						JOptionPane.showMessageDialog(this, "This playoff is tied\nThis playoff will be counted for both players"); 
+						// box is tied and no one can play on this board an dthe board is fully locked
+						if (gameWork())
+							return;
+						if (GameOver() >= 0) 
+							// final part // the board is locked and can not be playe don this
+						{
+							if (GameOver() == 0)  
+								// AI wins the game and win goes to AI but play can and can not be played on this
+							{
+								JOptionPane.showMessageDialog(this, "AI wins the game!");
+								// dailogs box for the AI pop ups 
+								turn.setText("AI wins!");
+								// dailogs for AI
+								setVisible(false); 
+								// it marks the component visible
+							
+							}
+							else if (GameOver() == 1) 
+								// player wins the game
+							{
+								JOptionPane.showMessageDialog(this, Name1 + " wins the game!");
+								// dailog box will pop up for the player when it wins the game or board box
+								turn.setText(Name1 + " wins!");
+								// pop up dialogs for player wins!!
+								setVisible(false);
+								// Boolean value trun false and its done and recored 				
+							}
+							// dissalbes all the playvibility of any and lock the board and passes wins or ties
+							disableAllplayoffs(true);
+							return;
+							// end
+						}
+						if (mainInterfaceFull()) 
+							// its that the game is tied
+						{
+							disableAllplayoffs(true);
+							// turn to game ties part
+							turn.setText("Game tied!");
+						// shows the dialogs box for the game tied
+							setVisible(false);
+						// done showing
+						}
+					}
+					int[] ops = positionInBoard(i, j); 
+					// tracks the placements on board 
+					int hog  = byteMark(ops[0], ops[1]);
+					// updated the location when it was being played and who won on it
+					if (!playoffisSolved(hog))
+					{
+						next = hog; 
+						// Java Scanner class which finds and returns the next complete token
+						colorPlayOff(hog, 3);
+						unavoidable = true; 
+						// forced to use raw types in its method signatures and return types because the methods it overrides from a super type
+					}
+					// just to the other conditions
+					else
+					{
+						unavoidable = false; 
+						//// forced to use raw types in its method signatures and will not return types because the methods it overrides from a super type
+						for (int g = 0; g <= 8; g++) {
+							colorPlayOff(g, 5);
+						}
+					}
+					if (!player1)
+						// on the player side
+					{
+						disableAllplayoffs(false);
+						//to creat the pause in the middle of the play
+						java.util.Timer timer = new java.util.Timer(); 
+						// threads to schedule tasks for future execution in a background thread
+						Beginner.AIWork timer1 = new Beginner.AIWork(); // timer
+						timer1.take(hog, i, j);
+						// Timer is a utility class that can be used to schedule a thread to be executed at certain time in future. 
+						// Java Timer class can be used to schedule a task to be run one-time or to be run at regular intervals
+						int wait; // instance method that's used for thread synchronization
+						 if (alternate <= 30) {
+							 // set up the timer
+							wait = 500 + (int)(Math.random() * 1501.0D); } 
+						 // Simply put, wait() is an instance method that's used for thread synchronization. 
+						 else { 
+							if ( alternate <= 60) {
+								wait = 2000 + (int)(Math.random() * 1501.0D);
+							} else
+								wait = 3000 + (int)(Math.random() * 2001.0D); }
+						 timer.schedule(timer1, wait);
+					} // end
+					return; 
+					// timer end
+				}
+			} // end
+		}
+	} // end of the method
+
+	private boolean gameWork() 
+	// boolean values which returns only true or false
+	{
+		int result = GameOver(); 
+		// end of game part
+		if (GameOver() >= 0)
+			// all the box are played or AI or player got 3 on rows// it will shows the dialogs accordingly
+		{
+			switch (result)
+			// sees who wins and shows the dialogs box accordingly 
+			{
+			// Use the switch statement to select one of many code blocks to be executed.
+			case 0: 
+				// shows when AI wins the game
+				JOptionPane.showMessageDialog(this, "AI wins the game!");
+				// Dialogs pop up for msg for AI wins
+				turn.setText("AI wins!");
+				// text for AI and update
+				setVisible(false);
+				//done
+				
+			case 1:
+				// Use the switch statement to select one of many code blocks to be executed.
+				// shows when player wins the game
+				JOptionPane.showMessageDialog(this, Name1 + " wins the game!");
+				// dialogs pop up for player who just won the game 
+				turn.setText(Name1 + " wins!");
+				// update the text
+				setVisible(false);
+				// done for the player 
+			
+			case 2: 
+				// Use the switch statement to select one of many code blocks to be executed.
+				// game is tied
+				JOptionPane.showMessageDialog(this, " The game is tied. ");
+				// shows the dialog pop up for the game which just got tied
+				turn.setText("Game is tied!");
+				//update the text for game being tied
+				setVisible(false);
+				// done for the game and got end
+			}
+			// stop the game //end it/ re-oppening is nessesory
+			disableAllplayoffs(true);
+			// boolean turn positive and finished the game
+			return true; 
+			// end of the end of the game
+		}
+		if (mainInterfaceFull()) 
+			// its  boolean method
+		{
+			disableAllplayoffs(true);
+			// no one can play the game as the game is already won 
+			turn.setText("Game tied!");
+			// text update game tied
+			setVisible(false);
+			// end of the boolean 
+		}
+		return false;
+		// end
+	}// end of the methode 
+
+	
